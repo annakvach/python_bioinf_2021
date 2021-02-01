@@ -20,7 +20,9 @@ plt.rcParams['figure.figsize'] = [18, 7]
 plt.rcParams['font.size'] = 13
 plt.rcParams['savefig.bbox'] = 'tight'
 
+# several plots
 figure, axes = plt.subplots(nrows=2, ncols=1)
+
 # color
 data_degener.plot(color=["darkred", "red", "cyan"], ax=axes[0])
 data_feed.plot(color=["purple"], ax=axes[1])
@@ -35,4 +37,6 @@ axes[0].set_xlabel("")
 axes[1].set_xlabel("Colony size (number of zooids)")
 
 plt.show()
+
+
 
