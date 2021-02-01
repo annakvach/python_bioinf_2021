@@ -1,4 +1,4 @@
-# asexamle i use Fasta file of All Wnt genes
+# as examle i use Fasta file of All Wnt genes
 # https://era.library.ualberta.ca/items/f1610b9e-6003-42f2-a430-e8c9fddc3483
 # Author(s) / Creator(s):
 # Sally Leys
@@ -9,12 +9,10 @@ import matplotlib.pyplot as plt
 
 # import path to file with sys.argv
 
-"""
 len_sys_argv = len(sys.argv[1:])
 path_to_file = sys.argv[1]
 
-"""
-path_to_file = "C:\my_mnt_c\Code\my_github\python_bioinf_2021\wnt_fasta_example.fasta"
+# path_to_file = "C:\my_mnt_c\Code\my_github\python_bioinf_2021\wnt_fasta_example.fasta"
 
 # data collecting
 x = 0
