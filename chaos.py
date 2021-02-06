@@ -4,9 +4,11 @@ import time
 from itertools import accumulate
 from operator import mul
 import matplotlib.pyplot as plt
+import seaborn as sns
+
 
 # for time
-size = 9
+size = 5
 progression = list(accumulate([10] * size, mul))
 list_random = []
 list_np = []
@@ -50,11 +52,10 @@ plt.rcParams['savefig.bbox'] = 'tight'
 plt.plot(y_ord, list_random,  color="cyan", label="Random")
 plt.plot(y_ord, list_np, color="darkred", label="Numpy")
 
-plt.title('The calculation time of random numbers vs their number')
+plt.title('The relationship between the calculation time of random numbers and their number')
 plt.xlabel('Number of random numbers')
 plt.ylabel('Time (sec)')
 plt.legend()
 plt.grid(True)
 
-# plt.show()
-plt.savefig('Random_task_1_pic_size_9.png')
+plt.show()
