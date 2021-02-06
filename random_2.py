@@ -76,6 +76,5 @@ ax.set_xticks(x_pos)
 ax.set_xticklabels(numbers)
 ax.set_title('Sorting time of the random list vs their number of items')
 ax.yaxis.grid(True)
-plt.show()
 
 plt.savefig('Random_task_2_pic.png')
