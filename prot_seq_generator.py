@@ -33,7 +33,7 @@ def dna_to_protein(path_to_fasta, codon_table):
 print("Hello!")
 path_to_fasta = input("Input path to the fasta file: ")
 print()
-codon_table = input("Input codon table. Default: Standart. \n"
+codon_table = input("Input codon table. Default: \"Standart\". For it print nothing. \n"
                     "If you want another - choose it there https://www.ncbi.nlm.nih.gov/Taxonomy/Utils/wprintgc.cgi  \n"
                     ": ")
 
@@ -41,6 +41,7 @@ if codon_table == '':
     codon_table = 1
 
 proin_seq = dna_to_protein(path_to_fasta, codon_table)
+print(next(proin_seq))
 
 # to see next protein sequence
 answer = True
