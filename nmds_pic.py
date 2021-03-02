@@ -1,63 +1,43 @@
-import numpy as np
-import scipy
-import matplotlib.pyplot as plt
-import csv
+# libraries
 import pandas as pd
+import matplotlib.pyplot as plt
+from pandas.plotting import parallel_coordinates
+import plotly.express as px
 
-from sklearn.metrics import pairwise_distances #jaccard diss.
-from sklearn import manifold  # multidimensional scaling
+path_to_data = "C:/my_mnt_c/Code/my_github/python_bioinf_2021/rd.csv"
 
 # import data.csv
-path_to_raw_data = "C:/my_mnt_c/Code/my_github/python_bioinf_2021/rd.csv"
-headers = ["<5 m", "5m-1y", "1y+", "2y+"]
-data = pd.read_csv(path_to_raw_data, sep=',', names=headers)
-data = data.astype(int)
+headers = ["Month", "Zooid bud",
+      "Feeding zoods","Degenerating zooid",
+      "Brown body", "Bb, polypide",
+      "Polypide, ovary", "Bb, polypide, ovary",
+      "Embryos", "All zoids", "Diameter_age"]
+data = pd.read_csv(path_to_data, sep=',', names=headers)
+# data cols type
+data[["Month", "Zooid bud",
+      "Feeding zoods", "Degenerating zooid",
+      "Brown body", "Bb, polypide",
+      "Polypide, ovary", "Bb, polypide, ovary",
+      "Embryos", "All zoids"]] = \
+    data[["Month", "Zooid bud", "Feeding zoods", "Degenerating zooid",
+          "Brown body", "Bb, polypide",
+          "Polypide, ovary", "Bb, polypide, ovary",
+          "Embryos", "All zoids"]].astype(int)
 
-data = data.to_numpy()
+data[["Diameter_age"]] = data[["Diameter_age"]].astype(str)
 
-dis_matrix = pairwise_distances(data, metric = 'jaccard')
-print(dis_matrix.shape)
-
-mds_model = manifold.MDS(n_components=2, random_state=123,
-                         dissimilarity='precomputed')
-mds_fit = mds_model.fit(dis_matrix)
-mds_coords = mds_model.fit_transform(dis_matrix)
+# ["< 5 month", "5 month - 1 year", "> 1 year", "> 2 years"
 
 
-plt.figure()
-plt.scatter(mds_coords[:, 0], mds_coords[:, 1],
-            facecolors='none', edgecolors='none')  # points in white (invisible)
-labels = headers
-for label, x, y in zip(labels, mds_coords[:, 0], mds_coords[:, 1]):
-    plt.annotate(label, (x, y), xycoords='data')
-plt.xlabel('First Dimension')
-plt.ylabel('Second Dimension')
-plt.title('Dissimilarity among food items')
+# plot
+
+# print(data)
+
+
+parallel_coordinates(data, 'Diameter_age',
+                     colormap=plt.get_cmap("Set3"),
+                     linewidth=1.5,
+                     alpha=0.8)
+plt.ylabel('Colony size and age $\\rightarrow$', fontsize=12)
+
 plt.show()
-
-"""
-
-
-foods_binary = np.random.randint(2, size=(100, 10)) #initial dataset
-print(foods_binary.shape)
-
-dis_matrix = pairwise_distances(foods_binary, metric = 'jaccard')
-print(dis_matrix.shape)
-
-mds_model = manifold.MDS(n_components=2, random_state=123,
-                         dissimilarity='precomputed')
-mds_fit = mds_model.fit(dis_matrix)
-mds_coords = mds_model.fit_transform(dis_matrix)
-
-food_names = ['pasta', 'pizza', 'meat', 'eggs', 'cheese', 'ananas', 'pear', 'bread', 'nuts', 'milk']
-plt.figure()
-plt.scatter(mds_coords[:, 0], mds_coords[:, 1],
-            facecolors='none', edgecolors='none')  # points in white (invisible)
-labels = food_names
-for label, x, y in zip(labels, mds_coords[:, 0], mds_coords[:, 1]):
-    plt.annotate(label, (x, y), xycoords='data')
-plt.xlabel('First Dimension')
-plt.ylabel('Second Dimension')
-plt.title('Dissimilarity among food items')
-plt.show()
-"""
