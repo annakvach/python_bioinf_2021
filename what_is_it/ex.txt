@@ -1,0 +1,18 @@
+>Scaffold001 {"definition":"Ramazzottius varieornatus DNA YOKOZUNA-1 Scaffold001", "taxonomy":"947166", "accession":"BDGG01000001.1", "bioproject":"PRJDB4588", "biosample":"SAMD00054187"}
+tgc
+>Scaffold002 {"definition":"Ramazzottius varieornatus DNA YOKOZUNA-1 Scaffold002", "taxonomy":"947166", "accession":"BDGG01000002.1", "bioproject":"PRJDB4588", "biosample":"SAMD00054187"}
+taatcattc
+>Scaffold003 {"definition":"Ramazzottius varieornatus DNA YOKOZUNA-1 Scaffold003", "taxonomy":"947166", "accession":"BDGG01000003.1", "bioproject":"PRJDB4588", "biosample":"SAMD00054187"}
+aag
+>Scaffold004 {"definition":"Ramazzottius varieornatus DNA YOKOZUNA-1 Scaffold004", "taxonomy":"947166", "accession":"BDGG01000004.1", "bioproject":"PRJDB4588", "biosample":"SAMD00054187"}
+gcaggaggaggaggaggaggaggagga
+>1
+gggaaacacgaacccttttat
+>2
+gggaacgggaaacccttttat
+>3
+gggaaacagaaacccttttat
+>4
+gggaaacacgggcccttt
+>5
+aaacccttttat
