@@ -6,6 +6,8 @@ hist_for_agct.ipynb - гистограмму распределения част
 
 subset_to_train_part.ipynb - сохранение из train_part.csv части из файла train.csv
 
+
+
 train.csv - см. выше
 
 train_part.csv - см. выше
