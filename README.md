@@ -6,6 +6,8 @@
 
 Ниже прилагаю аннотацию к файлам.
 
+(тут дз начиная с 2021 года)
+
 ### visualisation_photo_filtres_HW/
 
 * Pic.ipynb - код
