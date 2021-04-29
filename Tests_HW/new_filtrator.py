@@ -2,30 +2,26 @@ import sys
 
 # ANNA PART
 
+# Собираю аргументы и флаги
 list_flags_and_options = sys.argv[1:]
 last_ind_in_list_flags_and_options = len(list_flags_and_options) - 1
-
-# default values for filtration start
-# str_new_name = list_flags_and_options[last_ind_in_list_flags_and_options].split('.')[0]
-int_min_length = 0
-# float_left_gc_bound = 0.0
-# float_right_gc_bound = 100.0
-bool_error_output_permission = False
 
 
 def check_type_for_number(potential_number):
     try:
         float(potential_number)
         return True
-    except TypeError:
+    except ValueError:
         return False
+
 
 def check_int(number):
     try:
         int(number)
         return True
-    except TypeError:
+    except ValueError:
         return False
+
 
 # check is the argument in sys.argv[1:] is a flag
 def is_flag(x):
@@ -33,6 +29,21 @@ def is_flag(x):
         return True
     else:
         return False
+
+
+def flag_check(input_flags_and_options):
+    List = ["--output_base_name", "--min_length", "--gc_bounds", "--keep_filtered"]
+    for i in input_flags_and_options:
+        if is_flag(i):
+            if not any(i in s for s in List):
+                raise ValueError(f'You misspelled the flag: [{i}] \n'
+                                 f'Valid flags: \n'
+                                 f'\t --output_base_name \n'
+                                 f'\t --min_length \n'
+                                 f'\t --gc_bounds \n'
+                                 f'\t --keep_filtered \n')
+        else:
+            continue
 
 
 # check is the argument after flag is ok
@@ -67,34 +78,35 @@ def argument_after_after_flag(flag):
 # 1 part
 def fastq_file_check(file_extinction):
     if file_extinction in str(list_flags_and_options[last_ind_in_list_flags_and_options]):
-        str_path_to_dir_with_files = sys.path[0]
-        str_input_fastq_file_name = str(sys.argv[len(sys.argv) - 1])
-        str_path_to_input_fastq_file = str_path_to_dir_with_files + "/" + str_input_fastq_file_name
+        # str_path_to_dir_with_files = sys.path[0]
+        # str_input_fastq_file_name = str(sys.argv[len(sys.argv) - 1])
+        # str_path_to_input_fastq_file = str_path_to_dir_with_files + "/" + str_input_fastq_file_name
 
-        return str_path_to_dir_with_files, str_input_fastq_file_name, str_path_to_input_fastq_file;
+        return sys.path[0], str(sys.argv[len(sys.argv) - 1]), sys.path[0] + "/" + str(sys.argv[len(sys.argv) - 1])
     else:
         raise TypeError("Last argument should be .fastq file")
 
 
-str_path_to_dir_with_files, str_input_fastq_file_name, str_path_to_input_fastq_file = fastq_file_check(".fastq")
+'''str_path_to_dir_with_files, str_input_fastq_file_name, str_path_to_input_fastq_file = fastq_file_check(".fastq")'''
 
 # 2 part
 if (is_flag(list_flags_and_options[0]) == False) and (".fastq" not in str(list_flags_and_options[0])):
     sys.exit(
-        "You should specify at least 1 flag and file name to start filtering!(or just a file name to remove error message (although filtration won't start)")
+        "You should specify at least 1 flag and file name to start filtering!(or just a file name to "
+        "remove error message (although filtration won't start)")
 
 
 # 3 part
 
 def OUT_PUT_BASE_NAME(flag):
     if argument_after_flag(flag):
-        y1 = list_flags_and_options.index(flag) + 1
-        return str(list_flags_and_options[y1])
+        value = list_flags_and_options[list_flags_and_options.index(flag) + 1]
+        return str(value)
     else:
         return list_flags_and_options[last_ind_in_list_flags_and_options].split('.')[0]
 
 
-str_new_name = OUT_PUT_BASE_NAME("--output_base_name")
+'''str_new_name = OUT_PUT_BASE_NAME("--output_base_name")'''
 
 
 # 4 part
@@ -102,38 +114,36 @@ str_new_name = OUT_PUT_BASE_NAME("--output_base_name")
 def MIN_LENGTH(flag):
     if argument_after_flag(flag):
         value = list_flags_and_options[list_flags_and_options.index(flag) + 1]
-        print(value, type(value), float(value) % 2 == 0)
         if check_type_for_number(value):
             if check_int(value):
                 if not int(value) > 0:
-                    raise ValueError(f'Min length [{value}] value can`t be negative')
+                    raise ValueError(f'Min length value can`t be negative: [{value}]')
                 return int(value)
             else:
-                raise ValueError(f'Min length value [{value}] must be integer number only (int)')
+                raise ValueError(f'Min length value must be integer number only (int): [{value}]')
         else:
             raise TypeError(
-                f'Min length [{value}] value must be non-negative real integer number only (int)')
+                f'Min length value must be non-negative real integer number only (int): [{value}]')
     else:
         return 0
 
 
-int_min_length = MIN_LENGTH("--min-length")
+'''int_min_length = MIN_LENGTH("--min_length")'''
 
 
 # 5 part
 
 def LEFT_GC_BOUNDS(flag):
     if argument_after_flag(flag):
-        index = list_flags_and_options.index(flag) + 1
-        if check_type_for_number(list_flags_and_options[index]):
-            if float(list_flags_and_options[index]) > 0:
-                return float(list_flags_and_options[index])
+        value = list_flags_and_options[list_flags_and_options.index(flag) + 1]
+        print(value, type(value), check_type_for_number(value))
+        if check_type_for_number(value):
+            if float(value) > 0:
+                return float(value)
             else:
-                raise ValueError(f'Lower GC% bound value [{list_flags_and_options[index]}] must be non-negative real '
-                                 f'number only')
+                raise ValueError(f'Lower GC% bound value must be non-negative real number only: [{value}] ')
         else:
-            raise TypeError(f'Lower GC% bound value [{list_flags_and_options[index]}] must be real '
-                            f'number only (int or float)')
+            raise TypeError(f'Lower GC% bound value must be real number only (int or float): [{value}]')
     else:
         return 0.0
 
@@ -141,29 +151,28 @@ def LEFT_GC_BOUNDS(flag):
 def RIGHT_GC_BOUNDS(flag):
 
     if argument_after_after_flag(flag):
-        index = list_flags_and_options.index(flag) + 2
-        if check_type_for_number(list_flags_and_options[index]):
-            if float(list_flags_and_options[index]) > 0:
-                return float(list_flags_and_options[index])
+        value = list_flags_and_options[list_flags_and_options.index(flag) + 2]
+        if check_type_for_number(value):
+            if float(value) > 0:
+                return float(value)
             else:
-                raise ValueError(f'Upper GC% bound value [{list_flags_and_options[index]}] must be non-negative real '
-                                 f'number only. \n Remember to use a period and not a comma for numbers')
+                raise ValueError(f'Upper GC% bound value must be non-negative real number only: [{value}]. '
+                                 f'\n Remember to use a period and not a comma for numbers')
         else:
-            raise TypeError(f'Upper GC% bound value [{list_flags_and_options[index]}] must be real '
-                            f'number only int or float type. \n Remember to use a period and not a comma for numbers')
+            raise TypeError(f'Upper GC% bound value [{value}] must be real number only int or float type: [{value}]. '
+                            f'\n Remember to use a period and not a comma for numbers')
     else:
         return 100.0
 
 
 def gc_bound_adequacy(left_gc_bound, right_gc_bound):
     if left_gc_bound >= right_gc_bound:
-        raise ValueError('Lower GC% bound value must be strictly less than upper GC bound.')
+        raise ValueError(f'Lower GC% bound value must be strictly less than upper GC bound. [{left_gc_bound} >= {right_gc_bound}]')
 
 
-gc_bound_adequacy(LEFT_GC_BOUNDS("--gc_bounds"), RIGHT_GC_BOUNDS("--gc_bounds"))
-
+'''gc_bound_adequacy(LEFT_GC_BOUNDS("--gc_bounds"), RIGHT_GC_BOUNDS("--gc_bounds"))
 float_left_gc_bound = LEFT_GC_BOUNDS("--gc_bounds")
-float_right_gc_bound = RIGHT_GC_BOUNDS("--gc_bounds")
+float_right_gc_bound = RIGHT_GC_BOUNDS("--gc_bounds")'''
 
 
 def error_output_permission(flag):
@@ -173,6 +182,15 @@ def error_output_permission(flag):
         return False
 
 
+
+# проверяю аргуенты и флаги и сохраняю их для дальнейшего пользования
+flag_check(list_flags_and_options)
+str_path_to_dir_with_files, str_input_fastq_file_name, str_path_to_input_fastq_file = fastq_file_check(".fastq")
+str_new_name = OUT_PUT_BASE_NAME("--output_base_name")
+int_min_length = MIN_LENGTH("--min_length")
+gc_bound_adequacy(LEFT_GC_BOUNDS("--gc_bounds"), RIGHT_GC_BOUNDS("--gc_bounds"))
+float_left_gc_bound = LEFT_GC_BOUNDS("--gc_bounds")
+float_right_gc_bound = RIGHT_GC_BOUNDS("--gc_bounds")
 error_output_permission = error_output_permission("--keep_filtered")
 
 
