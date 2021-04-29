@@ -17,9 +17,15 @@ def check_type_for_number(potential_number):
     try:
         float(potential_number)
         return True
-    except ValueError:
+    except TypeError:
         return False
 
+def check_int(number):
+    try:
+        int(number)
+        return True
+    except TypeError:
+        return False
 
 # check is the argument in sys.argv[1:] is a flag
 def is_flag(x):
@@ -95,18 +101,18 @@ str_new_name = OUT_PUT_BASE_NAME("--output_base_name")
 
 def MIN_LENGTH(flag):
     if argument_after_flag(flag):
-        y2 = list_flags_and_options.index(flag) + 1
-        print(list_flags_and_options[y2])
-        if check_type_for_number(list_flags_and_options[y2]):
-            if float(list_flags_and_options[y2]) % 2 == 0:
-                if not int(list_flags_and_options[y2]) > 0:
-                    raise ValueError(f'Min length [{list_flags_and_options[y2]}] value can`t be negative')
-                return int(list_flags_and_options[y2])
+        value = list_flags_and_options[list_flags_and_options.index(flag) + 1]
+        print(value, type(value), float(value) % 2 == 0)
+        if check_type_for_number(value):
+            if check_int(value):
+                if not int(value) > 0:
+                    raise ValueError(f'Min length [{value}] value can`t be negative')
+                return int(value)
             else:
-                raise ValueError(f'Min length value [{list_flags_and_options[y2]}] must be integer number only (int)')
+                raise ValueError(f'Min length value [{value}] must be integer number only (int)')
         else:
             raise TypeError(
-                f'Min length [{list_flags_and_options[y2]}] value must be non-negative real integer number only (int)')
+                f'Min length [{value}] value must be non-negative real integer number only (int)')
     else:
         return 0
 
