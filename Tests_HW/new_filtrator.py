@@ -21,22 +21,22 @@ def is_flag(x):
         return False
 
 
-# check is the argument in sys.argv[1:] is a int
+'''# check is the argument in sys.argv[1:] is a int
 def isint(x):
     try:
         int(x)
         return True
     except ValueError:
-        return False
+        return False'''
 
 
-# check is the argument in sys.argv[1:] is a float
+'''# check is the argument in sys.argv[1:] is a float
 def isfloat(x):
     try:
         float(x)
         return True
     except ValueError:
-        return False
+        return False'''
 
 
 # check is the argument after flag is ok
@@ -98,15 +98,17 @@ if fun(z1):
     str_new_name = str(list_flags_and_options[y1])
 
 # 4 part
-z2 = "--min_length"
+z2 = "--min-length"
 fun(z2)
 
 if fun(z2):
     y2 = list_flags_and_options.index(z2) + 1
-    if isint(list_flags_and_options[y2]) and (int(list_flags_and_options[y2]) > 0):
+    if isinstance(list_flags_and_options[y2], int) and (int(list_flags_and_options[y2]) > 0):
         int_min_length = int(list_flags_and_options[y2])
     else:
-        sys.exit("Min length value should be integer and be > 0!")
+        raise ValueError('Min length value can`t be negative')
+        # sys.exit("Min length value should be integer and be > 0!")
+print(int(list_flags_and_options[y2]))
 
 # 5 part
 z3 = "--gc_bounds"
@@ -114,15 +116,15 @@ fun(z3)
 
 if fun(z3):
     y3 = list_flags_and_options.index(z3) + 1
-    if not (isfloat(list_flags_and_options[y3]) or (float(list_flags_and_options[y3]) > 0)):
+    if not (isinstance(list_flags_and_options[y3], float) or (float(list_flags_and_options[y3]) > 0)):
         sys.exit("Lower GC% bound value should be float and be > 0!")
-    elif isfloat(list_flags_and_options[y3]) and (float(list_flags_and_options[y3]) > 0):
+    elif isinstance(list_flags_and_options[y3], float) and (float(list_flags_and_options[y3]) > 0):
         float_left_gc_bound = float(list_flags_and_options[y3])
         zz = z3
         if fun_fun(zz):
-            if not (isfloat(list_flags_and_options[y3]) or (float(list_flags_and_options[y3]) > 0)):
+            if not (isinstance(list_flags_and_options[y3], float) or (float(list_flags_and_options[y3]) > 0)):
                 sys.exit("Upper GC% bound value should be float and be > 0!")
-            elif isfloat(list_flags_and_options[y3 + 1]) and (float(list_flags_and_options[y3 + 1]) > 0):
+            elif isinstance(list_flags_and_options[y3 + 1], float) and (float(list_flags_and_options[y3 + 1]) > 0):
                 float_right_gc_bound = float(list_flags_and_options[y3 + 1])
                 if float_left_gc_bound >= float_right_gc_bound:
                     sys.exit("Lower GC% bound value should be strictly less than upper GC bound!")

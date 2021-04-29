@@ -1,1 +1,25 @@
 Hru
+
+пример запуска:
+python3 new_filtrator.py --keep-filtered --min-length 10 --gc_bounds 40 60 --output_base_name BLIN ./test_file_for_filtrator.fastq
+
+
+БЕДЫ, которые я нашла:
+"--min-length" было "--min_length"
+
+
+
+План работ:
+
+прочекать функции:
+
+1. is_flag
+2. isint
+3. isfloat
+4. fun
+5. fun_fun
+6. gc_count
+7. passed
+8. file_output
+
+
