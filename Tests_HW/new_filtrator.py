@@ -12,10 +12,16 @@ float_left_gc_bound = 0.0
 float_right_gc_bound = 100.0
 bool_error_output_permission = False
 
+def check_type_for_number(potential_number):
+    try:
+        float(potential_number)
+        return True
+    except ValueError:
+        return False
 
 # check is the argument in sys.argv[1:] is a flag
 def is_flag(x):
-    if "--" in str(x):
+    if "--" in x:
         return True
     else:
         return False
@@ -86,17 +92,17 @@ def MIN_LENGTH(flag):
 
     if argument_after_flag(flag):
         y2 = list_flags_and_options.index(flag) + 1
-        if type(list_flags_and_options[y2]) in [int, float]:
-            if not (list_flags_and_options[y2].isdigit() and (int(list_flags_and_options[y2]) > 0)):
-                raise ValueError('Min length value can`t be negative')
+        print(list_flags_and_options[y2].isdigit())
+        if check_type_for_number(list_flags_and_options[y2]):
+            if not (int(list_flags_and_options[y2]) > 0):
+                raise ValueError(f'Min length [{list_flags_and_options[y2]}] value can`t be negative')
             int_min_length = int(list_flags_and_options[y2])
             return int_min_length
         else:
-            raise TypeError('Min length value must be non-negative real number only (int or float)')
+            raise TypeError(f'Min length [{list_flags_and_options[y2]}] value must be non-negative real number only (int or float)')
     else:
         int_min_length = 0
         return int_min_length
-
 
 
 int_min_length = MIN_LENGTH("--min-length")
