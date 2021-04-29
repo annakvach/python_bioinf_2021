@@ -21,26 +21,9 @@ def is_flag(x):
         return False
 
 
-'''# check is the argument in sys.argv[1:] is a int
-def isint(x):
-    try:
-        int(x)
-        return True
-    except ValueError:
-        return False'''
-
-
-'''# check is the argument in sys.argv[1:] is a float
-def isfloat(x):
-    try:
-        float(x)
-        return True
-    except ValueError:
-        return False'''
-
 
 # check is the argument after flag is ok
-def fun(z):
+def argument_after_flag(z):
     try:
         x = z
         y = list_flags_and_options.index(x) + 1
@@ -54,7 +37,7 @@ def fun(z):
 
 
 # check is the argument after-after flag is ok
-def fun_fun(zz):
+def argument_after_after_flag(zz):
     try:
         x = zz
         y = list_flags_and_options.index(x) + 2
@@ -93,35 +76,43 @@ if (is_flag(list_flags_and_options[0]) == False) and (".fastq" not in str(list_f
 # 3 part
 z1 = "--output_base_name"
 
-if fun(z1):
+if argument_after_flag(z1):
     y1 = list_flags_and_options.index(z1) + 1
     str_new_name = str(list_flags_and_options[y1])
 
 # 4 part
-z2 = "--min-length"
-fun(z2)
 
-if fun(z2):
-    y2 = list_flags_and_options.index(z2) + 1
-    if isinstance(list_flags_and_options[y2], int) and (int(list_flags_and_options[y2]) > 0):
-        int_min_length = int(list_flags_and_options[y2])
+def MIN_LENGTH(flag):
+
+    if argument_after_flag(flag):
+        y2 = list_flags_and_options.index(flag) + 1
+        if type(list_flags_and_options[y2]) in [int, float]:
+            if not (list_flags_and_options[y2].isdigit() and (int(list_flags_and_options[y2]) > 0)):
+                raise ValueError('Min length value can`t be negative')
+            int_min_length = int(list_flags_and_options[y2])
+            return int_min_length
+        else:
+            raise TypeError('Min length value must be non-negative real number only (int or float)')
     else:
-        raise ValueError('Min length value can`t be negative')
-        # sys.exit("Min length value should be integer and be > 0!")
-print(int(list_flags_and_options[y2]))
+        int_min_length = 0
+        return int_min_length
+
+
+
+int_min_length = MIN_LENGTH("--min-length")
 
 # 5 part
 z3 = "--gc_bounds"
-fun(z3)
+argument_after_flag(z3)
 
-if fun(z3):
+if argument_after_flag(z3):
     y3 = list_flags_and_options.index(z3) + 1
     if not (isinstance(list_flags_and_options[y3], float) or (float(list_flags_and_options[y3]) > 0)):
         sys.exit("Lower GC% bound value should be float and be > 0!")
     elif isinstance(list_flags_and_options[y3], float) and (float(list_flags_and_options[y3]) > 0):
         float_left_gc_bound = float(list_flags_and_options[y3])
         zz = z3
-        if fun_fun(zz):
+        if argument_after_after_flag(zz):
             if not (isinstance(list_flags_and_options[y3], float) or (float(list_flags_and_options[y3]) > 0)):
                 sys.exit("Upper GC% bound value should be float and be > 0!")
             elif isinstance(list_flags_and_options[y3 + 1], float) and (float(list_flags_and_options[y3 + 1]) > 0):
