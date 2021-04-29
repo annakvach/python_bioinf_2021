@@ -6,7 +6,7 @@ list_flags_and_options = sys.argv[1:]
 last_ind_in_list_flags_and_options = len(list_flags_and_options) - 1
 
 # default values for filtration start
-str_new_name = list_flags_and_options[last_ind_in_list_flags_and_options].split('.')[0]
+# str_new_name = list_flags_and_options[last_ind_in_list_flags_and_options].split('.')[0]
 int_min_length = 0
 float_left_gc_bound = 0.0
 float_right_gc_bound = 100.0
@@ -58,7 +58,6 @@ def argument_after_after_flag(zz):
 
 
 # 1 part
-
 def fastq_file_check(ex):
 
     if ex in str(list_flags_and_options[last_ind_in_list_flags_and_options]):
@@ -68,7 +67,7 @@ def fastq_file_check(ex):
 
         return str_path_to_dir_with_files, str_input_fastq_file_name, str_path_to_input_fastq_file;
     else:
-        sys.exit("Last argument should be .fastq file name!")
+        sys.exit("Last argument should be .fastq file name.")
 
 ex = ".fastq"
 str_path_to_dir_with_files, str_input_fastq_file_name, str_path_to_input_fastq_file = fastq_file_check(ex)
@@ -80,11 +79,17 @@ if (is_flag(list_flags_and_options[0]) == False) and (".fastq" not in str(list_f
         "You should specify at least 1 flag and file name to start filtering!(or just a file name to remove error message (although filtration won't start)")
 
 # 3 part
-z1 = "--output_base_name"
 
-if argument_after_flag(z1):
-    y1 = list_flags_and_options.index(z1) + 1
-    str_new_name = str(list_flags_and_options[y1])
+def OUT_PUT_BASE_NAME(flag):
+
+    if argument_after_flag(flag):
+        y1 = list_flags_and_options.index(flag) + 1
+        return str(list_flags_and_options[y1])
+    else:
+        return list_flags_and_options[last_ind_in_list_flags_and_options].split('.')[0]
+
+
+str_new_name = OUT_PUT_BASE_NAME("--output_base_name")
 
 # 4 part
 
@@ -96,13 +101,11 @@ def MIN_LENGTH(flag):
         if check_type_for_number(list_flags_and_options[y2]):
             if not (int(list_flags_and_options[y2]) > 0):
                 raise ValueError(f'Min length [{list_flags_and_options[y2]}] value can`t be negative')
-            int_min_length = int(list_flags_and_options[y2])
-            return int_min_length
+            return int(list_flags_and_options[y2])
         else:
             raise TypeError(f'Min length [{list_flags_and_options[y2]}] value must be non-negative real number only (int or float)')
     else:
-        int_min_length = 0
-        return int_min_length
+        return 0
 
 
 int_min_length = MIN_LENGTH("--min-length")
