@@ -8,6 +8,15 @@
 
 (тут дз начиная с 2021 года)
 
+### Tests_HW/
+Latest commit e155586 - на момент сдачи
+
+* Папка tests - лежит тест фильтратора под названием test_check_type_for_number.py 
+* new_filtrator.py - переписанный фильтратор, завернула весь парсинг в функции и поправилила расчет gc-bouds
+* PARSING_for_filtrator.py - тут функции которые я теститровала (не только парсинг)
+* circle.py и test_circle.py - просто тренировалась, к дз отношения не имеет
+* test_file_for_filtrator.fastq - файл с прочтениями, чтобы смотреть как работаетфильтратор
+
 ### visualisation_photo_filtres_HW/
 
 * Pic.ipynb - код
