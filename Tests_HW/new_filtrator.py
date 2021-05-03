@@ -98,7 +98,7 @@ if (is_flag(list_flags_and_options[0]) == False) and (".fastq" not in str(list_f
 
 # 3 part
 
-def OUT_PUT_BASE_NAME(flag):
+def OUT_PUT_BASE_NAME(flag, list_flags_and_options):
     if argument_after_flag(flag):
         value = list_flags_and_options[list_flags_and_options.index(flag) + 1]
         return str(value)
@@ -111,7 +111,7 @@ def OUT_PUT_BASE_NAME(flag):
 
 # 4 part
 
-def MIN_LENGTH(flag):
+def MIN_LENGTH(flag, list_flags_and_options):
     if argument_after_flag(flag):
         value = list_flags_and_options[list_flags_and_options.index(flag) + 1]
         if check_type_for_number(value):
@@ -133,10 +133,9 @@ def MIN_LENGTH(flag):
 
 # 5 part
 
-def LEFT_GC_BOUNDS(flag):
+def LEFT_GC_BOUNDS(flag, list_flags_and_options):
     if argument_after_flag(flag):
         value = list_flags_and_options[list_flags_and_options.index(flag) + 1]
-        print(value, type(value), check_type_for_number(value))
         if check_type_for_number(value):
             if float(value) > 0:
                 return float(value)
@@ -148,7 +147,7 @@ def LEFT_GC_BOUNDS(flag):
         return 0.0
 
 
-def RIGHT_GC_BOUNDS(flag):
+def RIGHT_GC_BOUNDS(flag, list_flags_and_options):
 
     if argument_after_after_flag(flag):
         value = list_flags_and_options[list_flags_and_options.index(flag) + 2]
@@ -175,7 +174,7 @@ float_left_gc_bound = LEFT_GC_BOUNDS("--gc_bounds")
 float_right_gc_bound = RIGHT_GC_BOUNDS("--gc_bounds")'''
 
 
-def error_output_permission(flag):
+def error_output_permission(flag, list_flags_and_options):
     if flag in list_flags_and_options:
         return True
     else:
@@ -186,12 +185,12 @@ def error_output_permission(flag):
 # проверяю аргуенты и флаги и сохраняю их для дальнейшего пользования
 flag_check(list_flags_and_options)
 str_path_to_dir_with_files, str_input_fastq_file_name, str_path_to_input_fastq_file = fastq_file_check(".fastq")
-str_new_name = OUT_PUT_BASE_NAME("--output_base_name")
-int_min_length = MIN_LENGTH("--min_length")
-gc_bound_adequacy(LEFT_GC_BOUNDS("--gc_bounds"), RIGHT_GC_BOUNDS("--gc_bounds"))
-float_left_gc_bound = LEFT_GC_BOUNDS("--gc_bounds")
-float_right_gc_bound = RIGHT_GC_BOUNDS("--gc_bounds")
-error_output_permission = error_output_permission("--keep_filtered")
+str_new_name = OUT_PUT_BASE_NAME("--output_base_name", list_flags_and_options)
+int_min_length = MIN_LENGTH("--min_length", list_flags_and_options)
+gc_bound_adequacy(LEFT_GC_BOUNDS("--gc_bounds"), RIGHT_GC_BOUNDS("--gc_bounds"), list_flags_and_options)
+float_left_gc_bound = LEFT_GC_BOUNDS("--gc_bounds", list_flags_and_options)
+float_right_gc_bound = RIGHT_GC_BOUNDS("--gc_bounds", list_flags_and_options)
+error_output_permission = error_output_permission("--keep_filtered", list_flags_and_options)
 
 
 # IGNAT PART
@@ -207,20 +206,22 @@ def gc_count(read):
 
 # ez
 # check for good reads
-def passed(read, int_min_length, float_left_gc_bound, float_right_gc_bound):
+def passed(read, int_min_length, float_left_gc_bound, float_right_gc_bound, list_flags_and_options):
     if "--min_length" in list_flags_and_options:
-        if len(read) < int_min_length:  # if l(read) < min length => F
-            return False
+        if len(read) > int_min_length:  # if l(read) < min length => F
+            l = True
         else:
-            return True
+            l = False
 
     if "--gc_bounds" in list_flags_and_options:
-        less = gc_count(read) < float_left_gc_bound  # if less than left GC bound => True
-        more = gc_count(read) > float_right_gc_bound  # if more than right GC bound => True
-        if less or more == True:
-            return False
+        if gc_count(read) > float_left_gc_bound  and  gc_count(read) < float_right_gc_bound:
+            b = True
         else:
-            return True
+            b = False
+    return b and l
+
+
+
 
 
 # ez
@@ -248,7 +249,7 @@ for i in range(0, len(all_reads), 4):  # we need to read lines by 4, e.g. 1-4, 5
     current_read = all_reads[i:i + 4]  # reading 2nd line where ATGC's are
     if i == 0:  # check if empty
         print()
-    if passed(current_read[1], int_min_length, float_left_gc_bound, float_right_gc_bound):
+    if passed(current_read[1], int_min_length, float_left_gc_bound, float_right_gc_bound, list_flags_and_options):
         file_output(current_read, fastq_passed)
         reads_passed += 1
     else:
