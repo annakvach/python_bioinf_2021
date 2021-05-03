@@ -6,7 +6,8 @@ from Tests_HW.PARSING_for_filtrator import \
     gc_count, \
     passed, \
     flag_check, \
-    argument_after_flag
+    argument_after_flag, \
+    argument_after_after_flag
 
 
 # Parsing part
@@ -52,10 +53,56 @@ def test_exit_argument_after_flag():
                             ['--min_length', '8', '--gc_bounds', '40', '41', '--keep_filtered', '--output_base_name',
                              'file.fastq'])
 
+'''
+def argument_after_after_flag(flag, my_list):
+    last_ind_in_list_flags_and_options = len(my_list) - 1
+    try:
+        x = flag
+        y = my_list.index(x) + 2
+        if x in my_list:
+            if (is_flag(my_list[y]) == True) or (y == last_ind_in_list_flags_and_options):
+                return False
+            else:
+                return True
+    except ValueError:
+        return False
+'''
 
 
+@pytest.mark.parametrize("flag, list_flags_and_options, result", [
+    # flag and arguments in different places
+    ('--gc_bounds',
+     ['--min_length', '15', '--keep_filtered', '--output_base_name', 'new_name', '--gc_bounds', '40', '41',
+      'file.fastq'], True),
 
+    ('--gc_bounds',
+     ['--min_length', '15', '--keep_filtered', '--gc_bounds', '40', '41', '--output_base_name', 'new_name',
+      'file.fastq'], True),
 
+    ('--gc_bounds',
+     ['--gc_bounds', '40', '41', '--min_length', '15',  '--keep_filtered', '--output_base_name', 'new_name',
+      'file.fastq'], True),
+
+    # without flag
+    ('--gc_bounds',
+     ['--min_length', '15', '--keep_filtered', '--output_base_name', 'new_name', '--gc_bounds', '40',
+      'file.fastq'], False),
+
+    # without second value in different places
+    ('--gc_bounds',
+     ['--gc_bounds', '15', '--keep_filtered', '--gc_bounds', '41', '--output_base_name', 'new_name',
+      'file.fastq'], False),
+
+    ('---gc_bounds',
+     ['--gc_bounds', '40', '--min_length', '15', '--keep_filtered', '--output_base_name', 'new_name',
+      'file.fastq'], False),
+
+    ('---gc_bounds',
+     ['--gc_bounds', '--min_length', '15', '--keep_filtered', '--output_base_name', 'new_name',
+      'file.fastq'], False),
+])
+def test_argument_after_after_flag(flag, list_flags_and_options, result):
+    assert argument_after_after_flag(flag, list_flags_and_options) == result
 
 
 

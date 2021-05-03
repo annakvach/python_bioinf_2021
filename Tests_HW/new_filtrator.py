@@ -45,9 +45,9 @@ def is_flag(x):
         return False
 
 
-def flag_check(list_flags_and_options):
+def flag_check(my_list):
     List = ["--output_base_name", "--min_length", "--gc_bounds", "--keep_filtered"]
-    for i in list_flags_and_options:
+    for i in my_list:
         if is_flag(i):
             if not any(i in s for s in List):
                 raise ValueError(f'You misspelled the flag: [{i}] \n'
@@ -62,12 +62,12 @@ def flag_check(list_flags_and_options):
 
 
 # check is the argument after flag is ok
-def argument_after_flag(flag, list_flags_and_options):
-    last_ind_in_list_flags_and_options = len(list_flags_and_options) - 1
+def argument_after_flag(flag, my_list):
+    last_ind_in_list_flags_and_options = len(my_list) - 1
     try:
-        y = list_flags_and_options.index(flag) + 1
-        if flag in list_flags_and_options:
-            if (is_flag(list_flags_and_options[y])) or (y == last_ind_in_list_flags_and_options):
+        y = my_list.index(flag) + 1
+        if flag in my_list:
+            if (is_flag(my_list[y])) or (y == last_ind_in_list_flags_and_options):
                 raise SystemExit(f"You forgot to specify values after flag [{flag}]!")
             else:
                 return True
@@ -76,13 +76,13 @@ def argument_after_flag(flag, list_flags_and_options):
 
 
 # check is the argument after-after flag is ok
-def argument_after_after_flag(flag, list_flags_and_options):
-    last_ind_in_list_flags_and_options = len(list_flags_and_options) - 1
+def argument_after_after_flag(flag, my_list):
+    last_ind_in_list_flags_and_options = len(my_list) - 1
     try:
         x = flag
-        y = list_flags_and_options.index(x) + 2
-        if x in list_flags_and_options:
-            if (is_flag(list_flags_and_options[y]) == True) or (y == last_ind_in_list_flags_and_options):
+        y = my_list.index(x) + 2
+        if x in my_list:
+            if (is_flag(my_list[y])) or (y == last_ind_in_list_flags_and_options):
                 return False
             else:
                 return True
@@ -92,9 +92,9 @@ def argument_after_after_flag(flag, list_flags_and_options):
 
 
 # 1 part
-def fastq_file_check(file_extinction, list_flags_and_options):
-    last_ind_in_list_flags_and_options = len(list_flags_and_options) - 1
-    if file_extinction in str(list_flags_and_options[last_ind_in_list_flags_and_options]):
+def fastq_file_check(file_extinction, my_list):
+    last_ind_in_list_flags_and_options = len(my_list) - 1
+    if file_extinction in str(my_list[last_ind_in_list_flags_and_options]):
         # str_path_to_dir_with_files = sys.path[0]
         # str_input_fastq_file_name = str(sys.argv[len(sys.argv) - 1])
         # str_path_to_input_fastq_file = str_path_to_dir_with_files + "/" + str_input_fastq_file_name
@@ -115,13 +115,13 @@ if (is_flag(list_flags_and_options[0]) == False) and (".fastq" not in str(list_f
 
 # 3 part
 
-def OUT_PUT_BASE_NAME(flag, list_flags_and_options):
-    last_ind_in_list_flags_and_options = len(list_flags_and_options) - 1
-    if argument_after_flag(flag, list_flags_and_options, last_ind_in_list_flags_and_options):
-        value = list_flags_and_options[list_flags_and_options.index(flag) + 1]
+def OUT_PUT_BASE_NAME(flag, my_list):
+    last_ind_in_list_flags_and_options = len(my_list) - 1
+    if argument_after_flag(flag, my_list):
+        value = my_list[my_list.index(flag) + 1]
         return str(value)
     else:
-        return list_flags_and_options[last_ind_in_list_flags_and_options].split('.')[0]
+        return my_list[last_ind_in_list_flags_and_options].split('.')[0]
 
 
 '''str_new_name = OUT_PUT_BASE_NAME("--output_base_name")'''
@@ -129,10 +129,10 @@ def OUT_PUT_BASE_NAME(flag, list_flags_and_options):
 
 # 4 part
 
-def MIN_LENGTH(flag, list_flags_and_options):
-    last_ind_in_list_flags_and_options = len(list_flags_and_options) - 1
-    if argument_after_flag(flag, list_flags_and_options, last_ind_in_list_flags_and_options):
-        value = list_flags_and_options[list_flags_and_options.index(flag) + 1]
+def MIN_LENGTH(flag, my_list):
+    last_ind_in_list_flags_and_options = len(my_list) - 1
+    if argument_after_flag(flag, my_list):
+        value = my_list[my_list.index(flag) + 1]
         if check_type_for_number(value):
             if check_int(value):
 
@@ -155,10 +155,10 @@ def MIN_LENGTH(flag, list_flags_and_options):
 
 # 5 part
 
-def LEFT_GC_BOUNDS(flag, list_flags_and_options):
-    last_ind_in_list_flags_and_options = len(list_flags_and_options) - 1
-    if argument_after_flag(flag, list_flags_and_options, last_ind_in_list_flags_and_options):
-        value = list_flags_and_options[list_flags_and_options.index(flag) + 1]
+def LEFT_GC_BOUNDS(flag, my_list):
+    last_ind_in_list_flags_and_options = len(my_list) - 1
+    if argument_after_flag(flag, my_list):
+        value = my_list[my_list.index(flag) + 1]
         if check_type_for_number(value):
             if float(value) > 0:
                 return float(value)
@@ -170,10 +170,10 @@ def LEFT_GC_BOUNDS(flag, list_flags_and_options):
         return 0.0
 
 
-def RIGHT_GC_BOUNDS(flag, list_flags_and_options):
-    last_ind_in_list_flags_and_options = len(list_flags_and_options) - 1
-    if argument_after_after_flag(flag, list_flags_and_options, last_ind_in_list_flags_and_options):
-        value = list_flags_and_options[list_flags_and_options.index(flag) + 2]
+def RIGHT_GC_BOUNDS(flag, my_list):
+    last_ind_in_list_flags_and_options = len(my_list) - 1
+    if argument_after_after_flag(flag, my_list):
+        value = my_list[my_list.index(flag) + 2]
         if check_type_for_number(value):
             if float(value) > 0:
                 return float(value)
@@ -197,8 +197,8 @@ float_left_gc_bound = LEFT_GC_BOUNDS("--gc_bounds")
 float_right_gc_bound = RIGHT_GC_BOUNDS("--gc_bounds")'''
 
 
-def error_output_permission(flag, list_flags_and_options):
-    if flag in list_flags_and_options:
+def error_output_permission(flag, my_list):
+    if flag in my_list:
         return True
     else:
         return False
@@ -206,6 +206,7 @@ def error_output_permission(flag, list_flags_and_options):
 
 
 # проверяю аргуенты и флаги и сохраняю их для дальнейшего пользования
+# my_list <-- list_flags_and_options
 flag_check(list_flags_and_options)
 
 str_path_to_dir_with_files, str_input_fastq_file_name, str_path_to_input_fastq_file = fastq_file_check(".fastq", list_flags_and_options)
@@ -244,7 +245,7 @@ def passed(read, int_min_length, float_left_gc_bound, float_right_gc_bound, list
             l = False
 
     if "--gc_bounds" in list_flags_and_options:
-        if gc_count(read) > float_left_gc_bound  and  gc_count(read) < float_right_gc_bound:
+        if float_left_gc_bound < gc_count(read) < float_right_gc_bound:
             b = True
         else:
             b = False
